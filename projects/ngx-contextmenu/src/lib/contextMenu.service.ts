@@ -106,20 +106,54 @@ export class ContextMenuService {
       })];
       this.attachContextMenu(this.overlays[0], context);
     } else {
-      const positionStrategy = this.overlay.position().connectedTo(
-        new ElementRef(event ? event.target : anchorElement),
-        { originX: 'end', originY: 'top' },
-        { overlayX: 'start', overlayY: 'top' })
-        .withFallbackPosition(
-        { originX: 'start', originY: 'top' },
-        { overlayX: 'end', overlayY: 'top' })
-        .withFallbackPosition(
-        { originX: 'end', originY: 'bottom' },
-        { overlayX: 'start', overlayY: 'bottom' })
-        .withFallbackPosition(
-        { originX: 'start', originY: 'bottom' },
-        { overlayX: 'end', overlayY: 'bottom' })
-        ;
+     const positionStrategy = this.overlay
+	.position()
+	.flexibleConnectedTo(new ElementRef(anchorElement || this.fakeElement))
+	.withPositions([
+		{
+			originX: 'start',
+			originY: 'top',
+			overlayX: 'start',
+			overlayY: 'top',
+		},
+		{
+			originX: 'start',
+			originY: 'top',
+			overlayX: 'start',
+			overlayY: 'bottom',
+		},
+		{
+			originX: 'end',
+			originY: 'top',
+			overlayX: 'start',
+			overlayY: 'top',
+		},
+		{
+			originX: 'start',
+			originY: 'top',
+			overlayX: 'end',
+			overlayY: 'top',
+		},
+		{
+			originX: 'end',
+			originY: 'center',
+			overlayX: 'start',
+			overlayY: 'center',
+		},
+		{
+			originX: 'end',
+			originY: 'center',
+			overlayX: 'start',
+			overlayY: 'center',
+		},
+		{
+			originX: 'start',
+			originY: 'center',
+			overlayX: 'end',
+			overlayY: 'center',
+		},
+	])
+	.withFlexibleDimensions(false);
       const newOverlay = this.overlay.create({
         positionStrategy,
         panelClass: 'ngx-contextmenu',
